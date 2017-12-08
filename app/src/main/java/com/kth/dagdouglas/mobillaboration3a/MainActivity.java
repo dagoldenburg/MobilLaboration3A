@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
-    private static int SAMPLE_SIZE = 3;
     private final  int maxAcceleration= 12;
     private Sensor accelerometer;
     private SensorManager sm;
@@ -22,15 +21,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView z;
     private  TextView a;
     private  TextView degree;
-    private float[] xVals= new float[SAMPLE_SIZE];
-    private float[] yVals= new float[SAMPLE_SIZE];
-    private float[] zVals= new float[SAMPLE_SIZE];
 
-    private float xa, ya, za;
+    private double xa, ya, za;
 
-   private int xcount=0;
-    private int ycount =0;
-    private int zcount =0;
+    private  double prevX,prevY,prevZ;
+
     private  int currentDegree;
     private  float currentAccel;
     private long startTime;
@@ -75,29 +70,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        prevX=xa;
+        xa=filter(prevX,event.values[0]);
+        prevY=ya;
+        ya = filter(prevY,event.values[1]);
 
+        prevZ = za;
+        za = filter(prevZ,event.values[2]);
 
-        xVals[xcount++]= event.values[0];
-        yVals[ycount++]= event.values[1];
-        zVals[zcount++]=event.values[2];
-        if(xcount==SAMPLE_SIZE){
-            xa = getAverage(xVals);
-            xVals= new float[SAMPLE_SIZE];
-            xcount=0;
-        }
-
-        if(ycount==SAMPLE_SIZE){
-            ya=getAverage(yVals);
-            yVals=new float[SAMPLE_SIZE];
-            ycount=0;
-        }
-
-        if(zcount==SAMPLE_SIZE){
-            za= getAverage(zVals);
-            zVals=new float[SAMPLE_SIZE];
-            zcount=0;
-        }
         currentAccel = (float) Math.sqrt(Math.pow(xa,2)+ Math.pow(ya,2)+Math.pow(za,2));
+
         if(currentAccel>maxAcceleration){
             startTime = System.currentTimeMillis();
             degree.setTextColor(Color.CYAN);
@@ -106,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             startTime=0;
             degree.setTextColor(Color.BLACK);
         }
+
         currentDegree = (int) Math.toDegrees(Math.atan2(xa,ya));
         x.setText("x :"+xa);
         y.setText("y:"+ya);
@@ -113,14 +96,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         a.setText("acc"+ currentAccel);
 
 
-
-
         degree.setText("Degree:"+currentDegree);
 
 
     }
     private double filter(double preValue, double sensorValue){
-        return (double) (0.5*preValue+(1-0.5)*sensorValue);
+        return (double) (0.8*preValue)+((1-0.8)*sensorValue);
     }
 
     private float getAverage(float[] list){
