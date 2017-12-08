@@ -35,19 +35,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar =  findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.sensor_menu);
+        toolbar.inflateMenu(R.menu.graph_menu);
         toolbar.setOnMenuItemClickListener(new android.support.v7.widget.Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.acc:
+                    case R.id.gview:
                         Intent intent = new Intent(getApplicationContext(), GraphActivity.class);
-
-
                         startActivity(intent);
-                        return true;
-                    case R.id.gyro:
-
                         return true;
                     default:
                         return false;
@@ -64,10 +59,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         x = findViewById(R.id.x);
         y = findViewById(R.id.y);
         z = findViewById(R.id.z);
-        a= findViewById(R.id.a);
+        a = findViewById(R.id.a);
         degree = findViewById(R.id.d);
     }
 
+    boolean cyan = false;
     @Override
     public void onSensorChanged(SensorEvent event) {
         prevX=xa;
@@ -81,12 +77,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         currentAccel = (float) Math.sqrt(Math.pow(xa,2)+ Math.pow(ya,2)+Math.pow(za,2));
 
         if(currentAccel>maxAcceleration){
-            startTime = System.currentTimeMillis();
-            degree.setTextColor(Color.CYAN);
+            if(startTime == 0) {
+                startTime = System.currentTimeMillis();
+            }else if(startTime+1000 >=System.currentTimeMillis() ) {
+                if(cyan){
+                    degree.setTextColor(Color.BLACK);
+                }else {
+                    degree.setTextColor(Color.CYAN);
+                }
+            }
         }
-         else if((System.currentTimeMillis()-startTime)<1000){
+        else if((System.currentTimeMillis()-startTime)<1000){
             startTime=0;
-            degree.setTextColor(Color.BLACK);
         }
 
         currentDegree = (int) Math.toDegrees(Math.atan2(xa,ya));

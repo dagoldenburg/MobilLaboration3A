@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/acc"
-        android:title="Accelerometer" />
-    <item
-        android:id="@+id/gyro"
-        android:title="Gyro" />
-    <item
-        android:id="@+id/magnet"
-        android:title="magnetometer" />
+        android:id="@+id/preference"
+        android:title="Preferences" />
 </menu>
