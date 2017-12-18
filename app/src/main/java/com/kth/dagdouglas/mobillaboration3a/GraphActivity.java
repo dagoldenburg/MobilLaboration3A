@@ -61,7 +61,7 @@ public class GraphActivity extends AppCompatActivity  implements SensorEventList
         graphView1=findViewById(R.id.graph);
 
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
         seriesX= new LineGraphSeries<>(new  DataPoint[]{});
         seriesX.setColor(Color.CYAN);
