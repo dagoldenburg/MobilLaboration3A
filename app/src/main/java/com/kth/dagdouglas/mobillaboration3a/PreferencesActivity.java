@@ -1,9 +1,13 @@
 package com.kth.dagdouglas.mobillaboration3a;
 
+import android.content.SharedPreferences;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class PreferencesActivity extends PreferenceActivity {
 
@@ -13,8 +17,6 @@ public class PreferencesActivity extends PreferenceActivity {
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
     }
 
-    
-
     public static class MyPreferenceFragment extends PreferenceFragment
     {
         @Override
@@ -22,7 +24,7 @@ public class PreferencesActivity extends PreferenceActivity {
         {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+
         }
     }
-
 }

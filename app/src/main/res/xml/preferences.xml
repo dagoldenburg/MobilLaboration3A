@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ListPreference android:title="Sensors"
+    <ListPreference android:id="@+id/listy"
+        android:title="Sensors"
         android:summary="Select which sensor you want to monitor"
         android:key="sensorType"
         android:defaultValue="1"
