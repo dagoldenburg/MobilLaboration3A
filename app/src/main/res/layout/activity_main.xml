@@ -7,58 +7,19 @@
     tools:context="com.kth.dagdouglas.mobillaboration3a.MainActivity">
 
     <TextView
-        android:id="@+id/z"
-        android:layout_width="240dp"
-        android:layout_height="50dp"
-        android:text="z"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="249dp" />
-
-    <TextView
-        android:id="@+id/x"
-        android:layout_width="240dp"
-        android:layout_height="49dp"
-        android:layout_marginTop="100dp"
-        android:text="x"
-        android:textSize="30sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <TextView
-        android:id="@+id/y"
-        android:layout_width="241dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="24dp"
-        android:text="y"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/z"
-        app:layout_constraintTop_toBottomOf="@+id/x"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <TextView
-        android:id="@+id/a"
-        android:layout_width="240dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Accel"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/d"
-        app:layout_constraintTop_toBottomOf="@+id/z"
-        tools:layout_editor_absoluteX="16dp" />
-
-    <TextView
         android:id="@+id/d"
-        android:layout_width="302dp"
+        android:layout_width="225dp"
         android:layout_height="87dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="208dp"
         android:text="Degrees"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.117" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

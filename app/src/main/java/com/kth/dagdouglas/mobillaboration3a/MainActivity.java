@@ -16,17 +16,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private final  int maxAcceleration= 12;
     private Sensor accelerometer;
     private SensorManager sm;
-    private TextView x;
-    private TextView y;
-    private TextView z;
-    private  TextView a;
     private  TextView degree;
 
     private double xa, ya, za;
 
     private  double prevX,prevY,prevZ;
 
-    private  int currentDegree;
+    private  int currentDegree,oldDegree;
     private  float currentAccel;
     private long startTime;
 
@@ -56,10 +52,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         sm.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
 
-        x = findViewById(R.id.x);
-        y = findViewById(R.id.y);
-        z = findViewById(R.id.z);
-        a = findViewById(R.id.a);
         degree = findViewById(R.id.d);
     }
 
@@ -82,8 +74,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }else if(startTime+1000 >=System.currentTimeMillis() ) {
                 if(cyan){
                     degree.setTextColor(Color.BLACK);
+                    cyan=false;
                 }else {
                     degree.setTextColor(Color.CYAN);
+                    cyan=true;
                 }
             }
         }
@@ -92,14 +86,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         currentDegree = (int) Math.toDegrees(Math.atan2(xa,ya));
-        x.setText("x :"+xa);
-        y.setText("y:"+ya);
-        z.setText("z"+za);
-        a.setText("acc"+ currentAccel);
-
-
-        degree.setText("Degree:"+currentDegree);
-
+        if(currentDegree<0){
+            currentDegree +=360;
+        }
+        degree.setText(""+(int)filter(oldDegree,currentDegree));
+        oldDegree = currentDegree;
 
     }
     private double filter(double preValue, double sensorValue){

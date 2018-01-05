@@ -7,38 +7,27 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-public class GraphActivity extends AppCompatActivity  implements SensorEventListener{
-
-
-    private Sensor accelerometer;
-
-
+public class GraphActivity extends AppCompatActivity  implements SensorEventListener {
+    private Sensor sensor;
+    SharedPreferences shareprefs;
     private GraphView graphView1;
     private SensorManager sensorManager;
 
     LineGraphSeries<DataPoint> seriesX;
     LineGraphSeries<DataPoint> seriesY;
-
     LineGraphSeries<DataPoint> seriesZ;
-
-
-    private DataPoint[] initX = new DataPoint[]{};
-
 
     private  int dataCount = 0;
     @Override
@@ -60,17 +49,42 @@ public class GraphActivity extends AppCompatActivity  implements SensorEventList
                 }
             }
         });
-
         graphView1=findViewById(R.id.graph);
+    }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        shareprefs = PreferenceManager.getDefaultSharedPreferences(this);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+        graphView1.removeAllSeries();
+
+        dataCount = 0;
+        int i = Integer.parseInt(shareprefs.getString("sensorType",null));
+        if(i==1){
+            Log.i("asd",1+"");
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        }else if(i==2){
+            Log.i("asd",2+"");
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        }else if(i==3){
+            Log.i("asd",3+"");
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+            sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        }
         seriesX= new LineGraphSeries<>(new  DataPoint[]{});
-        seriesX.setColor(Color.CYAN);
         seriesY = new LineGraphSeries<>(new DataPoint[]{});
-        seriesY.setColor(Color.RED);
         seriesZ = new LineGraphSeries<>(new DataPoint[]{});
+        seriesX.setColor(Color.CYAN);
+        seriesY.setColor(Color.RED);
         seriesZ.setColor(Color.GREEN);
         graphView1.addSeries(seriesX);
         graphView1.addSeries(seriesY);
@@ -85,13 +99,13 @@ public class GraphActivity extends AppCompatActivity  implements SensorEventList
         double sensorX = event.values[0];
         double sensory = event.values[1];
         double sensorz = event.values[2];
-        if(dataCount>20) {
+        if (dataCount > 20) {
             seriesX.appendData(new DataPoint(dataCount, sensorX), true, 20);
             seriesY.appendData(new DataPoint(dataCount, sensory), true, 20);
             seriesZ.appendData(new DataPoint(dataCount, sensorz), true, 20);
         }
         dataCount++;
-        Log.i("tag", "onSensorChanged: "+event.values[0]+" " +dataCount);
+        Log.i("tag", "onSensorChanged: " + event.values[0] + " " + dataCount + " " + event.sensor.getName());
     }
 
     @Override
